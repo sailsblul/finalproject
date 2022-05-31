@@ -46,8 +46,8 @@ namespace testing
                 new Level("some ball will fall", new List<Rectangle>()
                 {
                     new Rectangle(0, 60, 950, 30),
-                    new Rectangle(950, 250, 50, 450),
-                    new Rectangle()
+                    new Rectangle(950, 350, 50, 350),
+                    new Rectangle(400, 450, 50, 250)
                 }, new List<Ball>()
                 {
                     new Ball(new Vector2(20, 690), 10, Color.Blue)
