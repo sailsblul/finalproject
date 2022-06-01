@@ -39,7 +39,7 @@ namespace testing
                 }, new List<Ball>()
                 {
                     new Ball(new Vector2(50, 670), 10, Color.Red)
-                }, new Rectangle(930, 640, 60, 60), new List<Rectangle>(){ 
+                }, new Rectangle(930, 640, 60, 60), new List<Rectangle>(){
                     new Rectangle(475, 90, 50, 610)
                 }),
 
@@ -52,6 +52,24 @@ namespace testing
                 {
                     new Ball(new Vector2(20, 690), 10, Color.Blue)
                 }, new Rectangle(10, 10, 50, 50)),
+
+                new Level("Getting harder now :)", new List<Rectangle>()
+                {
+                    new Rectangle(465, 665, 10, 35),
+                    new Rectangle(525, 665, 10, 35),
+                    new Rectangle(60, 400, 50, 20),
+                    new Rectangle(160, 400, 50, 20),
+                    new Rectangle(790, 400, 50, 20),
+                    new Rectangle(890, 400, 50, 20),
+                }, new List<Ball>()
+                {
+                    new Ball(new Vector2(85, 390), 10, Color.Blue),
+                    new Ball(new Vector2(915 ,390), 10, Color.Blue)
+                }, new Rectangle(475, 670, 50, 30), new List<Rectangle>()
+                {
+                    new Rectangle(10, 670, 455, 30),
+                    new Rectangle(535, 670, 455, 30),
+                })
             };
         }
         public Level[] Levels

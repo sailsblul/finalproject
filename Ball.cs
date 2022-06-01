@@ -33,6 +33,10 @@ namespace testing
         {
             get { return _location; }
         }
+        public int Radius
+        {
+            get { return _radius; }
+        }
         public Color Colour
         {
             get { return _color; }

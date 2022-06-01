@@ -91,17 +91,26 @@ namespace testing
                 }
                 if (dead)
                     LoadLevel(levelManager.LevelNumber - 1);
-                if (currentLevel.Objects.TrueForAll(x => !x.Contains(mouseState.Position)))
-                    cursor.Position = mouseState.Position;
+                
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
                     foreach (Ball ball in currentLevel.Balls)
                     {
                         ball.Speed += (cursor.Position.ToVector2() - ball.Center) / Vector2.Distance(cursor.Position.ToVector2(), ball.Center) * new Vector2((float)0.65);
+                        
                     }
                 }
+                else
+                    if(currentLevel.Objects.TrueForAll(x => !x.Contains(mouseState.Position)))
+                        cursor.Position = mouseState.Position;
                 foreach (Ball ball in currentLevel.Balls)
+                {
                     ball.Speed /= (float)1.05;
+                    if (ball.Colour == Color.Blue && walls.TrueForAll(x => !x.Contains(new Point((int)ball.Center.X, (int)ball.Center.Y + ball.Radius + 1))))
+                        ball.Speed += new Vector2(0, (float)0.5);
+                }
+
+                
                 if (keyboardState.IsKeyDown(Keys.R) && oldKState.IsKeyUp(Keys.R))
                     LoadLevel(levelManager.LevelNumber - 1);
 
@@ -111,7 +120,7 @@ namespace testing
             {
                 if (keyboardState.IsKeyDown(Keys.Enter))
                 {
-                    LoadLevel(0);
+                    LoadLevel(3);
                 }
             }
             base.Update(gameTime);
