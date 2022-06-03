@@ -25,8 +25,11 @@ namespace testing
         {
             Title,
             Level,
+            LevelSelect
         }
         Screen screen;
+        Texture2D buttonTexture;
+        int levelNumber;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -59,6 +62,7 @@ namespace testing
             circleTexture = Content.Load<Texture2D>("circle");
             wallTexture = Content.Load<Texture2D>("rectangle");
             font = Content.Load<SpriteFont>("mainfont");
+            buttonTexture = Content.Load<Texture2D>("buttonicon");
             // TODO: use this.Content to load your game content here
         }
 
@@ -72,8 +76,8 @@ namespace testing
             if (screen == Screen.Level)
             {
                 if (currentLevel.Balls.TrueForAll(x => x.Intersects(currentLevel.Goal)))
-                    if (levelManager.LevelNumber < levelManager.Levels.Length)
-                        LoadLevel(levelManager.LevelNumber);
+                    if (levelNumber < levelManager.Levels.Length)
+                        LoadLevel(levelNumber);
                     else
                         screen = Screen.Title;
                 bool dead = false;
@@ -90,14 +94,13 @@ namespace testing
                         }
                 }
                 if (dead)
-                    LoadLevel(levelManager.LevelNumber - 1);
+                    LoadLevel(levelNumber - 1);
                 
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
                     foreach (Ball ball in currentLevel.Balls)
                     {
                         ball.Speed += (cursor.Position.ToVector2() - ball.Center) / Vector2.Distance(cursor.Position.ToVector2(), ball.Center) * new Vector2((float)0.65);
-                        
                     }
                 }
                 else
@@ -112,7 +115,7 @@ namespace testing
 
                 
                 if (keyboardState.IsKeyDown(Keys.R) && oldKState.IsKeyUp(Keys.R))
-                    LoadLevel(levelManager.LevelNumber - 1);
+                    LoadLevel(levelNumber - 1);
 
                 oldKState = Keyboard.GetState();
             }
@@ -120,8 +123,14 @@ namespace testing
             {
                 if (keyboardState.IsKeyDown(Keys.Enter))
                 {
-                    LoadLevel(3);
+                    screen = Screen.LevelSelect;
                 }
+            }
+            else if (screen == Screen.LevelSelect)
+            {
+                foreach (LevelButton button in levelManager.Buttons)
+                    if (button.IsPressed(mouseState))
+                        LoadLevel(button.Number - 1);
             }
             base.Update(gameTime);
         }
@@ -140,7 +149,7 @@ namespace testing
                         _spriteBatch.Draw(wallTexture, borders[i], Color.DarkViolet);
                     else
                         _spriteBatch.Draw(wallTexture, borders[i], Color.Black);
-                _spriteBatch.DrawString(font, $"Level {levelManager.LevelNumber} - {currentLevel.Name}", new Vector2(10, 710), Color.White);
+                _spriteBatch.DrawString(font, $"Level {levelNumber} - {currentLevel.Name}", new Vector2(10, 710), Color.White);
                 foreach (Ball ball in currentLevel.Balls)
                     _spriteBatch.Draw(circleTexture, ball.Rect, ball.Colour);
                 _spriteBatch.Draw(circleTexture, cursor.Rect, Color.Plum);
@@ -149,6 +158,11 @@ namespace testing
             {
                 _spriteBatch.DrawString(font, "help what do i call this", new Vector2(30, 30), Color.DarkGray);
             }
+            else if (screen == Screen.LevelSelect)
+            {
+                foreach (LevelButton button in levelManager.Buttons)
+                    button.Draw(_spriteBatch, buttonTexture, font);
+            }
             _spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -156,7 +170,7 @@ namespace testing
         {
             currentLevel = levelManager.Levels[num];
             currentLevel.Reset();
-            levelManager.LevelNumber = num + 1;
+            levelNumber = num + 1;
             walls = new List<Rectangle>(borders);
             walls.AddRange(currentLevel.Walls);
             screen = Screen.Level;

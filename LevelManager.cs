@@ -7,8 +7,8 @@ namespace testing
 {
     class LevelManager
     {
+        List<LevelButton> _buttons = new List<LevelButton>();
         Level[] _levels;
-        int _levelNumber = 0;
         public LevelManager()
         {
             _levels = new Level[]
@@ -45,13 +45,13 @@ namespace testing
 
                 new Level("some ball will fall", new List<Rectangle>()
                 {
-                    new Rectangle(0, 60, 950, 30),
+                    new Rectangle(0, 80, 920, 30),
                     new Rectangle(950, 350, 50, 350),
                     new Rectangle(400, 450, 50, 250)
                 }, new List<Ball>()
                 {
                     new Ball(new Vector2(20, 690), 10, Color.Blue)
-                }, new Rectangle(10, 10, 50, 50)),
+                }, new Rectangle(10, 10, 50, 70)),
 
                 new Level("Getting harder now :)", new List<Rectangle>()
                 {
@@ -69,25 +69,42 @@ namespace testing
                 {
                     new Rectangle(10, 670, 455, 30),
                     new Rectangle(535, 670, 455, 30),
-                })
+                }),
+
+                new Level("Mindless contrarian", new List<Rectangle>()
+                {
+                    new Rectangle(90, 0, 300, 300),
+                    new Rectangle(90, 400, 200, 300),
+                    new Rectangle(700, 90, 210, 610),
+                    new Rectangle(390, 0, 220, 420),
+                    new Rectangle(90, 510, 610, 190)
+
+                }, new List<Ball>()
+                {
+                    new Ball(new Vector2(40), 10, Color.Red),
+                    new Ball(new Vector2(40, 650), 10, Color.Cyan)
+                }, new Rectangle(910, 650, 80, 80)),
             };
+
+
+            for (int i = 0; i < Levels.Length; i++)
+                _buttons.Add(new LevelButton(i + 1, new Rectangle(new Point(250 * (i % 4) + 25, 250 * (i / 4) + 25), new Point(200))));
         }
         public Level[] Levels
         {
             get { return _levels; }
         }
-        public int LevelNumber
+        public List<LevelButton> Buttons
         {
-            get { return _levelNumber; }
-            set { _levelNumber = value; }
+            get { return _buttons; }
         }
     }
 }
 /* new Level("", new List<Rectangle>()
                 {
-                    new Rectangle()
+                    new Rectangle(),
                 }, new List<Ball>()
                 {
-                    new Ball(new Vector2(), 10, Color.Red)
+                    new Ball(new Vector2(), 10, Color.Red),
                 }, new Rectangle()),
 */
