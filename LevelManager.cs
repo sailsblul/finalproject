@@ -78,12 +78,27 @@ namespace testing
                     new Rectangle(700, 90, 210, 610),
                     new Rectangle(390, 0, 220, 420),
                     new Rectangle(90, 510, 610, 190)
-
                 }, new List<Ball>()
                 {
                     new Ball(new Vector2(40), 10, Color.Red),
                     new Ball(new Vector2(40, 650), 10, Color.Cyan)
                 }, new Rectangle(910, 650, 80, 80)),
+
+                new Level("Minor inconvenience", new List<Rectangle>()
+                {
+                    new Rectangle(920, 640, 20, 60),
+                    new Rectangle(250, 520, 60, 20),
+                    new Rectangle(50, 330, 60, 20),
+                    new Rectangle(450, 290, 60, 20),
+                    new Rectangle(650, 450, 60, 20),
+                }, new List<Ball>()
+                {
+                    new Ball(new Vector2(280, 150), 10, Color.Cyan),
+                    new Ball(new Vector2(280, 510), 10, Color.Blue),
+                }, new Rectangle(940, 650, 50, 50), new List<Rectangle>(){
+                    new Rectangle(10, 10, 980, 30),
+                    new Rectangle(10, 670, 910, 30)
+                }),
             };
 
 

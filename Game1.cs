@@ -20,6 +20,7 @@ namespace testing
         Level currentLevel;
         LevelManager levelManager;
         Cursor cursor = new Cursor(new Point(0));
+
         
         enum Screen
         {
@@ -92,6 +93,9 @@ namespace testing
                         {
                             dead = true;
                         }
+                    if (ball.Center.Y > borders[0].Bottom)
+                        ball.UndoMove();
+
                 }
                 if (dead)
                     LoadLevel(levelNumber - 1);
@@ -100,7 +104,11 @@ namespace testing
                 {
                     foreach (Ball ball in currentLevel.Balls)
                     {
-                        ball.Speed += (cursor.Position.ToVector2() - ball.Center) / Vector2.Distance(cursor.Position.ToVector2(), ball.Center) * new Vector2((float)0.65);
+                        Vector2 speedChange = (cursor.Position.ToVector2() - ball.Center) / Vector2.Distance(cursor.Position.ToVector2(), ball.Center) * new Vector2((float)0.65);
+                        if (ball.Colour == Color.Cyan)
+                            ball.Speed -= speedChange;
+                        else
+                            ball.Speed += speedChange;
                     }
                 }
                 else

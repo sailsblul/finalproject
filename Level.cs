@@ -67,7 +67,7 @@ namespace testing
             foreach (Rectangle wall in _walls)
                 spriteBatch.Draw(texture, wall, Color.Black);
             foreach (Rectangle danger in _dangers)
-                spriteBatch.Draw(texture, danger, Color.Orange);
+                spriteBatch.Draw(texture, danger, Color.DarkOrange);
             spriteBatch.Draw(texture, _goal, Color.LimeGreen);
         }
         public void Reset()

@@ -105,5 +105,9 @@ namespace testing
         {
             return new Ball(_location, _radius, _color);
         }
+        public void UndoMove()
+        {
+            _location -= _speed;
+        }
     }
 }
