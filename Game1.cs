@@ -10,8 +10,10 @@ namespace testing
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         SpriteFont font;
+        SpriteFont bigFont;
         Texture2D circleTexture;
         MouseState mouseState;
+        MouseState oldState;
         KeyboardState keyboardState;
         KeyboardState oldKState;
         Texture2D wallTexture;
@@ -20,17 +22,21 @@ namespace testing
         Level currentLevel;
         LevelManager levelManager;
         Cursor cursor = new Cursor(new Point(0));
-
-        
+        float seconds;
+        float timeStamp;
         enum Screen
         {
             Title,
             Level,
-            LevelSelect
+            LevelSelect,
+            LevelComplete
         }
         Screen screen;
         Texture2D buttonTexture;
         int levelNumber;
+        bool record;
+        Rectangle nextLevel = new Rectangle(20, 650, 470, 80);
+        Rectangle mainMenu = new Rectangle(510, 650, 470, 80);
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -63,6 +69,7 @@ namespace testing
             circleTexture = Content.Load<Texture2D>("circle");
             wallTexture = Content.Load<Texture2D>("rectangle");
             font = Content.Load<SpriteFont>("mainfont");
+            bigFont = Content.Load<SpriteFont>("bigfont");
             buttonTexture = Content.Load<Texture2D>("buttonicon");
             // TODO: use this.Content to load your game content here
         }
@@ -77,10 +84,7 @@ namespace testing
             if (screen == Screen.Level)
             {
                 if (currentLevel.Balls.TrueForAll(x => x.Intersects(currentLevel.Goal)))
-                    if (levelNumber < levelManager.Levels.Length)
-                        LoadLevel(levelNumber);
-                    else
-                        screen = Screen.Title;
+                    FinishLevel(seconds);
                 bool dead = false;
                 foreach (Ball ball in currentLevel.Balls)
                 {
@@ -93,12 +97,12 @@ namespace testing
                         {
                             dead = true;
                         }
-                    if (ball.Center.Y > borders[0].Bottom)
+                    if (ball.Center.Y > borders[0].Top)
                         ball.UndoMove();
 
                 }
                 if (dead)
-                    LoadLevel(levelNumber - 1);
+                    LoadLevel(levelNumber - 1, gameTime);
                 
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
@@ -118,14 +122,15 @@ namespace testing
                 {
                     ball.Speed /= (float)1.05;
                     if (ball.Colour == Color.Blue && walls.TrueForAll(x => !x.Contains(new Point((int)ball.Center.X, (int)ball.Center.Y + ball.Radius + 1))))
-                        ball.Speed += new Vector2(0, (float)0.5);
+                        ball.Speed += new Vector2(0, (float)0.4);
                 }
 
                 
                 if (keyboardState.IsKeyDown(Keys.R) && oldKState.IsKeyUp(Keys.R))
-                    LoadLevel(levelNumber - 1);
+                    LoadLevel(levelNumber - 1, gameTime);
 
                 oldKState = Keyboard.GetState();
+                seconds = (float)gameTime.TotalGameTime.TotalSeconds - timeStamp;
             }
             else if (screen == Screen.Title)
             {
@@ -138,8 +143,17 @@ namespace testing
             {
                 foreach (LevelButton button in levelManager.Buttons)
                     if (button.IsPressed(mouseState))
-                        LoadLevel(button.Number - 1);
+                        LoadLevel(button.Number - 1, gameTime);
             }
+            else if (screen == Screen.LevelComplete)
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed && oldState.LeftButton == ButtonState.Released)
+                    if (nextLevel.Contains(mouseState.Position) && levelNumber < levelManager.Levels.Length)
+                        LoadLevel(levelNumber, gameTime);
+                    else if (mainMenu.Contains(mouseState.Position))
+                        screen = Screen.LevelSelect;
+            }
+            oldState = Mouse.GetState();
             base.Update(gameTime);
         }
 
@@ -158,23 +172,40 @@ namespace testing
                     else
                         _spriteBatch.Draw(wallTexture, borders[i], Color.Black);
                 _spriteBatch.DrawString(font, $"Level {levelNumber} - {currentLevel.Name}", new Vector2(10, 710), Color.White);
+                _spriteBatch.DrawString(font, seconds.ToString("F1") + "s", new Vector2(990 - font.MeasureString(seconds.ToString("F1") + "s").X, 710), Color.White);
                 foreach (Ball ball in currentLevel.Balls)
                     _spriteBatch.Draw(circleTexture, ball.Rect, ball.Colour);
                 _spriteBatch.Draw(circleTexture, cursor.Rect, Color.Plum);
             }
             else if (screen == Screen.Title)
             {
-                _spriteBatch.DrawString(font, "help what do i call this", new Vector2(30, 30), Color.DarkGray);
+                _spriteBatch.DrawString(bigFont, "help what do i call this", new Vector2(30, 30), Color.DarkGray);
             }
             else if (screen == Screen.LevelSelect)
             {
                 foreach (LevelButton button in levelManager.Buttons)
                     button.Draw(_spriteBatch, buttonTexture, font);
             }
+            else if (screen == Screen.LevelComplete)
+            {
+                _spriteBatch.DrawString(bigFont, "Level Complete!", new Vector2(500 - bigFont.MeasureString("Level Complete!").X / 2, 30), Color.Teal);
+                _spriteBatch.DrawString(font, $"Your time: {seconds:F1}s", new Vector2(20, 250), Color.Gray);
+                if (record)
+                    _spriteBatch.DrawString(font, "New record!", new Vector2(20, 300), Color.DarkRed);
+                else
+                    _spriteBatch.DrawString(font, $"Best time: {levelManager.Times[levelNumber - 1]:F1}s", new Vector2(20, 300), Color.DarkRed);
+                if (levelNumber < levelManager.Levels.Length)
+                {
+                    _spriteBatch.Draw(buttonTexture, nextLevel, Color.Aquamarine);
+                    _spriteBatch.DrawString(font, "Next level", nextLevel.Center.ToVector2() - (font.MeasureString("Next level") / 2), Color.Black);
+                }
+                _spriteBatch.Draw(buttonTexture, mainMenu, Color.Aquamarine);
+                _spriteBatch.DrawString(font, "Level select", mainMenu.Center.ToVector2() - (font.MeasureString("Level select") / 2), Color.Black);
+            }
             _spriteBatch.End();
             base.Draw(gameTime);
         }
-        void LoadLevel(int num)
+        void LoadLevel(int num, GameTime gameTime)
         {
             currentLevel = levelManager.Levels[num];
             currentLevel.Reset();
@@ -182,6 +213,18 @@ namespace testing
             walls = new List<Rectangle>(borders);
             walls.AddRange(currentLevel.Walls);
             screen = Screen.Level;
+            timeStamp = (float)gameTime.TotalGameTime.TotalSeconds;
+        }
+        void FinishLevel(float time)
+        {
+            screen = Screen.LevelComplete;
+            if (levelManager.Times[levelNumber - 1] == 0 || time < levelManager.Times[levelNumber - 1])
+            {
+                record = true;
+                levelManager.Times[levelNumber - 1] = time;
+            }
+            else
+                record = false;
         }
     }
 }

@@ -107,7 +107,7 @@ namespace testing
         }
         public void UndoMove()
         {
-            _location -= _speed;
+            _location.Y -= _speed.Y;
         }
     }
 }

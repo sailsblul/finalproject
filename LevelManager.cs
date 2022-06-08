@@ -9,6 +9,7 @@ namespace testing
     {
         List<LevelButton> _buttons = new List<LevelButton>();
         Level[] _levels;
+        float[] _bestTimes;
         public LevelManager()
         {
             _levels = new Level[]
@@ -104,6 +105,7 @@ namespace testing
 
             for (int i = 0; i < Levels.Length; i++)
                 _buttons.Add(new LevelButton(i + 1, new Rectangle(new Point(250 * (i % 4) + 25, 250 * (i / 4) + 25), new Point(200))));
+            _bestTimes = new float[_levels.Length];
         }
         public Level[] Levels
         {
@@ -112,6 +114,11 @@ namespace testing
         public List<LevelButton> Buttons
         {
             get { return _buttons; }
+        }
+        public float[] Times
+        {
+            get { return _bestTimes; }
+            set { _bestTimes = value; }
         }
     }
 }
