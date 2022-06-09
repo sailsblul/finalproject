@@ -6,13 +6,13 @@ using System.Text;
 
 namespace testing
 {
-    class Ball
+    class Cell
     {
         Vector2 _location;
         Vector2 _speed;
         Color _color;
         int _radius;
-        public Ball(Vector2 location, int radius, Color color)
+        public Cell(Vector2 location, int radius, Color color)
         {
             _location = location;
             _speed = new Vector2(0);
@@ -101,9 +101,9 @@ namespace testing
             return new Vector2(-1, 1);
 
         }
-        public Ball Copy()
+        public Cell Copy()
         {
-            return new Ball(_location, _radius, _color);
+            return new Cell(_location, _radius, _color);
         }
         public void UndoMove()
         {

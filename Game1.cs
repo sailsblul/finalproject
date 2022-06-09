@@ -11,7 +11,7 @@ namespace testing
         private SpriteBatch _spriteBatch;
         SpriteFont font;
         SpriteFont bigFont;
-        Texture2D circleTexture;
+        Texture2D cellTexture;
         MouseState mouseState;
         MouseState oldState;
         KeyboardState keyboardState;
@@ -66,7 +66,7 @@ namespace testing
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            circleTexture = Content.Load<Texture2D>("circle");
+            cellTexture = Content.Load<Texture2D>("cell");
             wallTexture = Content.Load<Texture2D>("rectangle");
             font = Content.Load<SpriteFont>("mainfont");
             bigFont = Content.Load<SpriteFont>("bigfont");
@@ -86,7 +86,7 @@ namespace testing
                 if (currentLevel.Balls.TrueForAll(x => x.Intersects(currentLevel.Goal)))
                     FinishLevel(seconds);
                 bool dead = false;
-                foreach (Ball ball in currentLevel.Balls)
+                foreach (Cell ball in currentLevel.Balls)
                 {
                     ball.Move();
                     foreach (Rectangle wall in walls)
@@ -106,7 +106,7 @@ namespace testing
                 
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    foreach (Ball ball in currentLevel.Balls)
+                    foreach (Cell ball in currentLevel.Balls)
                     {
                         Vector2 speedChange = (cursor.Position.ToVector2() - ball.Center) / Vector2.Distance(cursor.Position.ToVector2(), ball.Center) * new Vector2((float)0.65);
                         if (ball.Colour == Color.Cyan)
@@ -118,10 +118,10 @@ namespace testing
                 else
                     if(currentLevel.Objects.TrueForAll(x => !x.Contains(mouseState.Position)))
                         cursor.Position = mouseState.Position;
-                foreach (Ball ball in currentLevel.Balls)
+                foreach (Cell ball in currentLevel.Balls)
                 {
                     ball.Speed /= (float)1.05;
-                    if (ball.Colour == Color.Blue && walls.TrueForAll(x => !x.Contains(new Point((int)ball.Center.X, (int)ball.Center.Y + ball.Radius + 1))))
+                    if (ball.Colour == Color.Magenta && walls.TrueForAll(x => !x.Contains(new Point((int)ball.Center.X, (int)ball.Center.Y + ball.Radius + 1))))
                         ball.Speed += new Vector2(0, (float)0.4);
                 }
 
@@ -173,13 +173,13 @@ namespace testing
                         _spriteBatch.Draw(wallTexture, borders[i], Color.Black);
                 _spriteBatch.DrawString(font, $"Level {levelNumber} - {currentLevel.Name}", new Vector2(10, 710), Color.White);
                 _spriteBatch.DrawString(font, seconds.ToString("F1") + "s", new Vector2(990 - font.MeasureString(seconds.ToString("F1") + "s").X, 710), Color.White);
-                foreach (Ball ball in currentLevel.Balls)
-                    _spriteBatch.Draw(circleTexture, ball.Rect, ball.Colour);
-                _spriteBatch.Draw(circleTexture, cursor.Rect, Color.Plum);
+                foreach (Cell ball in currentLevel.Balls)
+                    _spriteBatch.Draw(cellTexture, ball.Rect, ball.Colour);
+                _spriteBatch.Draw(cellTexture, cursor.Rect, Color.Plum);
             }
             else if (screen == Screen.Title)
             {
-                _spriteBatch.DrawString(bigFont, "help what do i call this", new Vector2(30, 30), Color.DarkGray);
+                _spriteBatch.DrawString(bigFont, "Cell Escape", new Vector2(30, 30), Color.DarkGray);
             }
             else if (screen == Screen.LevelSelect)
             {

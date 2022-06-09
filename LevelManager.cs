@@ -17,9 +17,9 @@ namespace testing
                 new Level("Click to move", new List<Rectangle>()
                 {
                     new Rectangle(400, 0, 20, 300)
-                }, new List<Ball>()
+                }, new List<Cell>()
                 {
-                    new Ball(new Vector2(30, 30), 10, Color.Red),
+                    new Cell(new Vector2(30, 30), 10, Color.Red),
                 }, new Rectangle(950, 10, 40, 20)),
 
                 new Level("Two of them...", new List<Rectangle>()
@@ -27,31 +27,31 @@ namespace testing
                     new Rectangle(0, 0, 450, 300),
                     new Rectangle(550, 0, 450, 300),
                     new Rectangle(0, 400, 1000, 300)
-                }, new List<Ball>()
+                }, new List<Cell>()
                 {
-                    new Ball(new Vector2(60, 350), 10, Color.Red),
-                    new Ball(new Vector2(940, 350), 10, Color.Red)
+                    new Cell(new Vector2(60, 350), 10, Color.Red),
+                    new Cell(new Vector2(940, 350), 10, Color.Red)
                 }, new Rectangle(450, 10, 100, 50)),
 
                 new Level("Danger!!!!", new List<Rectangle>()
                 {
                     new Rectangle(0, 0, 320, 500),
                     new Rectangle(680, 0, 320, 500)
-                }, new List<Ball>()
+                }, new List<Cell>()
                 {
-                    new Ball(new Vector2(50, 670), 10, Color.Red)
+                    new Cell(new Vector2(50, 670), 10, Color.Red)
                 }, new Rectangle(930, 640, 60, 60), new List<Rectangle>(){
                     new Rectangle(475, 90, 50, 610)
                 }),
 
-                new Level("some ball will fall", new List<Rectangle>()
+                new Level("Cell wall? more like cell FALL", new List<Rectangle>()
                 {
                     new Rectangle(0, 80, 920, 30),
                     new Rectangle(950, 350, 50, 350),
                     new Rectangle(400, 450, 50, 250)
-                }, new List<Ball>()
+                }, new List<Cell>()
                 {
-                    new Ball(new Vector2(20, 690), 10, Color.Blue)
+                    new Cell(new Vector2(20, 690), 10, Color.Magenta)
                 }, new Rectangle(10, 10, 50, 70)),
 
                 new Level("Getting harder now :)", new List<Rectangle>()
@@ -62,10 +62,10 @@ namespace testing
                     new Rectangle(160, 400, 50, 20),
                     new Rectangle(790, 400, 50, 20),
                     new Rectangle(890, 400, 50, 20),
-                }, new List<Ball>()
+                }, new List<Cell>()
                 {
-                    new Ball(new Vector2(85, 390), 10, Color.Blue),
-                    new Ball(new Vector2(915 ,390), 10, Color.Blue)
+                    new Cell(new Vector2(85, 390), 10, Color.Magenta),
+                    new Cell(new Vector2(915 ,390), 10, Color.Magenta)
                 }, new Rectangle(475, 670, 50, 30), new List<Rectangle>()
                 {
                     new Rectangle(10, 670, 455, 30),
@@ -79,10 +79,10 @@ namespace testing
                     new Rectangle(700, 90, 210, 610),
                     new Rectangle(390, 0, 220, 420),
                     new Rectangle(90, 510, 610, 190)
-                }, new List<Ball>()
+                }, new List<Cell>()
                 {
-                    new Ball(new Vector2(40), 10, Color.Red),
-                    new Ball(new Vector2(40, 650), 10, Color.Cyan)
+                    new Cell(new Vector2(40), 10, Color.Red),
+                    new Cell(new Vector2(40, 650), 10, Color.Cyan)
                 }, new Rectangle(910, 650, 80, 80)),
 
                 new Level("Minor inconvenience", new List<Rectangle>()
@@ -92,10 +92,10 @@ namespace testing
                     new Rectangle(50, 330, 60, 20),
                     new Rectangle(450, 290, 60, 20),
                     new Rectangle(650, 450, 60, 20),
-                }, new List<Ball>()
+                }, new List<Cell>()
                 {
-                    new Ball(new Vector2(280, 150), 10, Color.Cyan),
-                    new Ball(new Vector2(280, 510), 10, Color.Blue),
+                    new Cell(new Vector2(280, 150), 10, Color.Cyan),
+                    new Cell(new Vector2(280, 510), 10, Color.Magenta),
                 }, new Rectangle(940, 650, 50, 50), new List<Rectangle>(){
                     new Rectangle(10, 10, 980, 30),
                     new Rectangle(10, 670, 910, 30)

@@ -9,12 +9,12 @@ namespace testing
     class Level
     {
         List<Rectangle> _walls;
-        List<Ball> _balls;
-        List<Ball> _startingBalls;
+        List<Cell> _balls;
+        List<Cell> _startingBalls;
         Rectangle _goal;
         string _name;
         List<Rectangle> _dangers;
-        public Level(string name, List<Rectangle> walls, List<Ball> balls, Rectangle goal)
+        public Level(string name, List<Rectangle> walls, List<Cell> balls, Rectangle goal)
         {
             _name = name;
             _walls = walls;
@@ -22,7 +22,7 @@ namespace testing
             _goal = goal;
             _dangers = new List<Rectangle>();
         }
-        public Level(string name, List<Rectangle> walls, List<Ball> balls, Rectangle goal, List<Rectangle> dangers)
+        public Level(string name, List<Rectangle> walls, List<Cell> balls, Rectangle goal, List<Rectangle> dangers)
         {
             _name = name;
             _walls = walls;
@@ -34,7 +34,7 @@ namespace testing
         {
             get { return _walls; }
         }
-        public List<Ball> Balls
+        public List<Cell> Balls
         {
             get { return _balls; }
         }
@@ -72,8 +72,8 @@ namespace testing
         }
         public void Reset()
         {
-            _balls = new List<Ball>();
-            foreach (Ball ball in _startingBalls)
+            _balls = new List<Cell>();
+            foreach (Cell ball in _startingBalls)
                 _balls.Add(ball.Copy());
         }
     }
