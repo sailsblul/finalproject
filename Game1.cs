@@ -12,6 +12,7 @@ namespace testing
         SpriteFont font;
         SpriteFont bigFont;
         Texture2D cellTexture;
+        Texture2D circle;
         MouseState mouseState;
         MouseState oldState;
         KeyboardState keyboardState;
@@ -21,7 +22,7 @@ namespace testing
         List<Rectangle> walls = new List<Rectangle>();
         Level currentLevel;
         LevelManager levelManager;
-        Cursor cursor = new Cursor(new Point(0));
+        Cursor cursor;
         float seconds;
         float timeStamp;
         enum Screen
@@ -41,7 +42,7 @@ namespace testing
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
         }
 
         protected override void Initialize()
@@ -49,6 +50,7 @@ namespace testing
             // TODO: Add your initialization logic here
             _graphics.PreferredBackBufferWidth = 1000;
             _graphics.PreferredBackBufferHeight = 750;
+            Window.Title = "Cell Escape";
             _graphics.ApplyChanges();
             base.Initialize();
             borders = new List<Rectangle>
@@ -66,11 +68,13 @@ namespace testing
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            circle = Content.Load<Texture2D>("circle");
             cellTexture = Content.Load<Texture2D>("cell");
             wallTexture = Content.Load<Texture2D>("rectangle");
             font = Content.Load<SpriteFont>("mainfont");
             bigFont = Content.Load<SpriteFont>("bigfont");
             buttonTexture = Content.Load<Texture2D>("buttonicon");
+            cursor = new Cursor(new Point(), circle);
             // TODO: use this.Content to load your game content here
         }
 
@@ -103,7 +107,7 @@ namespace testing
                 }
                 if (dead)
                     LoadLevel(levelNumber - 1, gameTime);
-                
+
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
                     foreach (Cell ball in currentLevel.Balls)
@@ -116,7 +120,7 @@ namespace testing
                     }
                 }
                 else
-                    if(currentLevel.Objects.TrueForAll(x => !x.Contains(mouseState.Position)))
+                    if (currentLevel.Objects.TrueForAll(x => !x.Contains(mouseState.Position)))
                         cursor.Position = mouseState.Position;
                 foreach (Cell ball in currentLevel.Balls)
                 {
@@ -125,33 +129,37 @@ namespace testing
                         ball.Speed += new Vector2(0, (float)0.4);
                 }
 
-                
+
                 if (keyboardState.IsKeyDown(Keys.R) && oldKState.IsKeyUp(Keys.R))
                     LoadLevel(levelNumber - 1, gameTime);
 
                 oldKState = Keyboard.GetState();
                 seconds = (float)gameTime.TotalGameTime.TotalSeconds - timeStamp;
             }
-            else if (screen == Screen.Title)
+            else
             {
-                if (keyboardState.IsKeyDown(Keys.Enter))
+                cursor.Position = mouseState.Position;
+                if (screen == Screen.Title)
                 {
-                    screen = Screen.LevelSelect;
-                }
-            }
-            else if (screen == Screen.LevelSelect)
-            {
-                foreach (LevelButton button in levelManager.Buttons)
-                    if (button.IsPressed(mouseState))
-                        LoadLevel(button.Number - 1, gameTime);
-            }
-            else if (screen == Screen.LevelComplete)
-            {
-                if (mouseState.LeftButton == ButtonState.Pressed && oldState.LeftButton == ButtonState.Released)
-                    if (nextLevel.Contains(mouseState.Position) && levelNumber < levelManager.Levels.Length)
-                        LoadLevel(levelNumber, gameTime);
-                    else if (mainMenu.Contains(mouseState.Position))
+                    if (keyboardState.IsKeyDown(Keys.Enter))
+                    {
                         screen = Screen.LevelSelect;
+                    }
+                }
+                else if (screen == Screen.LevelSelect)
+                {
+                    foreach (LevelButton button in levelManager.Buttons)
+                        if (button.IsPressed(mouseState))
+                            LoadLevel(button.Number - 1, gameTime);
+                }
+                else if (screen == Screen.LevelComplete)
+                {
+                    if (mouseState.LeftButton == ButtonState.Pressed && oldState.LeftButton == ButtonState.Released)
+                        if (nextLevel.Contains(mouseState.Position) && levelNumber < levelManager.Levels.Length)
+                            LoadLevel(levelNumber, gameTime);
+                        else if (mainMenu.Contains(mouseState.Position))
+                            screen = Screen.LevelSelect;
+                }
             }
             oldState = Mouse.GetState();
             base.Update(gameTime);
@@ -175,11 +183,11 @@ namespace testing
                 _spriteBatch.DrawString(font, seconds.ToString("F1") + "s", new Vector2(990 - font.MeasureString(seconds.ToString("F1") + "s").X, 710), Color.White);
                 foreach (Cell ball in currentLevel.Balls)
                     _spriteBatch.Draw(cellTexture, ball.Rect, ball.Colour);
-                _spriteBatch.Draw(cellTexture, cursor.Rect, Color.Plum);
             }
             else if (screen == Screen.Title)
             {
-                _spriteBatch.DrawString(bigFont, "Cell Escape", new Vector2(30, 30), Color.DarkGray);
+                _spriteBatch.DrawString(bigFont, "Cell Escape!", new Vector2(500 - bigFont.MeasureString("Cell Escape!").X / 2, 30), Color.DarkGray);
+                _spriteBatch.DrawString(font, "press enter to start", new Vector2(750, 370), Color.Gray);
             }
             else if (screen == Screen.LevelSelect)
             {
@@ -202,6 +210,7 @@ namespace testing
                 _spriteBatch.Draw(buttonTexture, mainMenu, Color.Aquamarine);
                 _spriteBatch.DrawString(font, "Level select", mainMenu.Center.ToVector2() - (font.MeasureString("Level select") / 2), Color.Black);
             }
+            cursor.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
