@@ -7,9 +7,9 @@ namespace testing
 {
     class LevelManager
     {
-        List<LevelButton> _buttons = new List<LevelButton>();
-        Level[] _levels;
-        float[] _bestTimes;
+        private List<LevelButton> _buttons = new List<LevelButton>();
+        private Level[] _levels;
+        private float[] _bestTimes;
         public LevelManager()
         {
             _levels = new Level[]
@@ -74,11 +74,11 @@ namespace testing
 
                 new Level("Mindless contrarian", new List<Rectangle>()
                 {
-                    new Rectangle(90, 0, 300, 300),
+                    new Rectangle(90, 0, 350, 300),
                     new Rectangle(90, 400, 200, 300),
-                    new Rectangle(700, 90, 210, 610),
+                    new Rectangle(700, 90, 210, 630),
                     new Rectangle(390, 0, 220, 420),
-                    new Rectangle(90, 510, 610, 190)
+                    new Rectangle(90, 510, 650, 200)
                 }, new List<Cell>()
                 {
                     new Cell(new Vector2(40), 10, Color.Red),

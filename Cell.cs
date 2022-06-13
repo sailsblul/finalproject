@@ -8,10 +8,10 @@ namespace testing
 {
     class Cell
     {
-        Vector2 _location;
-        Vector2 _speed;
-        Color _color;
-        int _radius;
+        private Vector2 _location;
+        private Vector2 _speed;
+        private Color _color;
+        private int _radius;
         public Cell(Vector2 location, int radius, Color color)
         {
             _location = location;

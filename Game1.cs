@@ -173,7 +173,7 @@ namespace testing
             _spriteBatch.Begin();
             if (screen == Screen.Level)
             {
-                currentLevel.DrawLevel(_spriteBatch, wallTexture);
+                currentLevel.DrawLevel(_spriteBatch, wallTexture, circle);
                 for (int i = 0; i < borders.Count; i++)
                     if (i == 0)
                         _spriteBatch.Draw(wallTexture, borders[i], Color.DarkViolet);

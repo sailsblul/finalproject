@@ -8,8 +8,8 @@ namespace testing
 {
     class Cursor
     {
-        Point _pos;
-        Texture2D _texture;
+        private Point _pos;
+        private Texture2D _texture;
         public Cursor(Point pos, Texture2D texture)
         {
             _pos = pos;
