@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
-namespace testing
+namespace cellescape
 {
     public class Game1 : Game
     {
@@ -13,6 +13,7 @@ namespace testing
         SpriteFont bigFont;
         Texture2D cellTexture;
         Texture2D circle;
+        Texture2D lava;
         MouseState mouseState;
         MouseState oldState;
         KeyboardState keyboardState;
@@ -20,6 +21,7 @@ namespace testing
         Texture2D wallTexture;
         List<Rectangle> borders;
         List<Rectangle> walls = new List<Rectangle>();
+        readonly Rectangle gameBounds = new Rectangle(10, 10, 980, 690);
         Level currentLevel;
         LevelManager levelManager;
         Cursor cursor;
@@ -74,6 +76,7 @@ namespace testing
             font = Content.Load<SpriteFont>("mainfont");
             bigFont = Content.Load<SpriteFont>("bigfont");
             buttonTexture = Content.Load<Texture2D>("buttonicon");
+            lava = Content.Load<Texture2D>("magma");
             cursor = new Cursor(new Point(), circle);
             // TODO: use this.Content to load your game content here
         }
@@ -98,12 +101,9 @@ namespace testing
                             ball.Bounce(wall);
                     foreach (Rectangle danger in currentLevel.Dangers)
                         if (ball.Intersects(danger))
-                        {
                             dead = true;
-                        }
-                    if (ball.Center.Y > borders[0].Top)
-                        ball.UndoMove();
-
+                    if (!gameBounds.Contains(ball.Center))
+                        ball.StopOOB(borders);
                 }
                 if (dead)
                     LoadLevel(levelNumber - 1, gameTime);
@@ -121,7 +121,7 @@ namespace testing
                 }
                 else
                     if (currentLevel.Objects.TrueForAll(x => !x.Contains(mouseState.Position)))
-                        cursor.Position = mouseState.Position;
+                    cursor.Position = mouseState.Position;
                 foreach (Cell ball in currentLevel.Balls)
                 {
                     ball.Speed /= (float)1.05;
@@ -132,6 +132,8 @@ namespace testing
 
                 if (keyboardState.IsKeyDown(Keys.R) && oldKState.IsKeyUp(Keys.R))
                     LoadLevel(levelNumber - 1, gameTime);
+                if (keyboardState.IsKeyDown(Keys.Q) && oldKState.IsKeyUp(Keys.Q))
+                    screen = Screen.LevelSelect;
 
                 oldKState = Keyboard.GetState();
                 seconds = (float)gameTime.TotalGameTime.TotalSeconds - timeStamp;
@@ -170,10 +172,10 @@ namespace testing
             GraphicsDevice.Clear(Color.PapayaWhip);
 
             // TODO: Add your drawing code here
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap);
             if (screen == Screen.Level)
             {
-                currentLevel.DrawLevel(_spriteBatch, wallTexture, circle);
+                currentLevel.DrawLevel(_spriteBatch, wallTexture, circle, lava);
                 for (int i = 0; i < borders.Count; i++)
                     if (i == 0)
                         _spriteBatch.Draw(wallTexture, borders[i], Color.DarkViolet);
@@ -193,6 +195,7 @@ namespace testing
             {
                 foreach (LevelButton button in levelManager.Buttons)
                     button.Draw(_spriteBatch, buttonTexture, font);
+                _spriteBatch.DrawString(font, "How to play: \n - Hold the mouse button to make the cells move \n - Guide them to the goal (green area) \n - Press R to restart a level \n - Press Q to return to this screen", new Vector2(25, 555), Color.DarkGray);
             }
             else if (screen == Screen.LevelComplete)
             {
@@ -205,10 +208,10 @@ namespace testing
                 if (levelNumber < levelManager.Levels.Length)
                 {
                     _spriteBatch.Draw(buttonTexture, nextLevel, Color.Aquamarine);
-                    _spriteBatch.DrawString(font, "Next level", nextLevel.Center.ToVector2() - (font.MeasureString("Next level") / 2), Color.Black);
+                    _spriteBatch.DrawString(font, "Next level", nextLevel.Center.ToVector2() - font.MeasureString("Next level") / 2, Color.Black);
                 }
                 _spriteBatch.Draw(buttonTexture, mainMenu, Color.Aquamarine);
-                _spriteBatch.DrawString(font, "Level select", mainMenu.Center.ToVector2() - (font.MeasureString("Level select") / 2), Color.Black);
+                _spriteBatch.DrawString(font, "Level select", mainMenu.Center.ToVector2() - font.MeasureString("Level select") / 2, Color.Black);
             }
             cursor.Draw(_spriteBatch);
             _spriteBatch.End();

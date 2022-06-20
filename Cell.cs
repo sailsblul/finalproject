@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace testing
+namespace cellescape
 {
     class Cell
     {
@@ -105,9 +105,33 @@ namespace testing
         {
             return new Cell(_location, _radius, _color);
         }
-        public void UndoMove()
+        public void StopOOB(List<Rectangle> edges)
         {
-            _location.Y -= _speed.Y;
+            /*bool done = false;
+            _location -= _speed;
+            while (!done)
+            {
+                _location += _speed / Math.Max(_speed.X, _speed.Y);
+                foreach(Rectangle rect in edges)
+                {
+                    if (Intersects(rect))
+                    {
+                        done = true;
+                        Bounce(rect);
+                    }
+                }
+            }
+            */
+            if (_location.X < 10)
+                _location.X = edges[1].Right + _radius;
+            if (_location.X > 990)
+                _location.X = edges[3].X - _radius;
+            if (_location.Y < 0)
+                _location.Y = edges[2].Bottom + _radius;
+            if (_location.Y > 700)
+                _location.Y = edges[0].Y - _radius;
+            //fix contrarians glitching out of the level!!!!!!
+            //still doesnt quite work, program freezes...
         }
     }
 }

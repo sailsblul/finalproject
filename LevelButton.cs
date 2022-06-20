@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace testing
+namespace cellescape
 {
     class LevelButton
     {
@@ -23,7 +23,7 @@ namespace testing
         public void Draw(SpriteBatch spriteBatch, Texture2D texture, SpriteFont font)
         {
             spriteBatch.Draw(texture, _box, Color.Aquamarine);
-            spriteBatch.DrawString(font, _number.ToString(), _box.Center.ToVector2() - (font.MeasureString(_number.ToString()) / 2), Color.Gray);
+            spriteBatch.DrawString(font, _number.ToString(), _box.Center.ToVector2() - font.MeasureString(_number.ToString()) / 2, Color.Gray);
         }
         public bool IsPressed(MouseState mouse) => mouse.LeftButton == ButtonState.Pressed && _box.Contains(mouse.Position);
     }

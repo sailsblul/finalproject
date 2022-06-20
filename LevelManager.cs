@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace testing
+namespace cellescape
 {
     class LevelManager
     {
@@ -46,9 +46,9 @@ namespace testing
 
                 new Level("Cell wall? more like cell FALL", new List<Rectangle>()
                 {
-                    new Rectangle(0, 80, 920, 30),
-                    new Rectangle(950, 350, 50, 350),
-                    new Rectangle(400, 450, 50, 250)
+                    new Rectangle(0, 120, 800, 50),
+                    new Rectangle(800, 400, 200, 350),
+                    new Rectangle(400, 500, 200, 250)
                 }, new List<Cell>()
                 {
                     new Cell(new Vector2(20, 690), 10, Color.Magenta)

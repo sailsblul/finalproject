@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace testing
+namespace cellescape
 {
     class Level
     {
@@ -84,24 +84,25 @@ namespace testing
                 return bigs;
             }
         }
-        public void DrawLevel(SpriteBatch spriteBatch, Texture2D texture, Texture2D texture2)
+        public void DrawLevel(SpriteBatch spriteBatch, Texture2D rectTexture, Texture2D circle, Texture2D lava)
         {
             foreach (Rectangle wall in SmallWalls)
-                spriteBatch.Draw(texture, wall, Color.Black);
+                spriteBatch.Draw(rectTexture, wall, Color.Black);
             foreach (Rectangle wall in BigWalls)
             {
-                spriteBatch.Draw(texture, new Rectangle(wall.X, wall.Y + 10, wall.Width, wall.Height - 20), Color.Black);
-                spriteBatch.Draw(texture, new Rectangle(wall.X + 10, wall.Y, wall.Width - 20, wall.Height), Color.Black);
-                spriteBatch.Draw(texture2, new Rectangle(wall.Location, new Point(20)), Color.Black);
-                spriteBatch.Draw(texture2, new Rectangle(wall.Location + wall.Size - new Point(20), new Point(20)), Color.Black);
-                spriteBatch.Draw(texture2, new Rectangle(wall.X, wall.Bottom - 20, 20, 20), Color.Black);
-                spriteBatch.Draw(texture2, new Rectangle(wall.Right - 20, wall.Y, 20, 20), Color.Black);
+                spriteBatch.Draw(rectTexture, new Rectangle(wall.X, wall.Y + 10, wall.Width, wall.Height - 20), Color.Black);
+                spriteBatch.Draw(rectTexture, new Rectangle(wall.X + 10, wall.Y, wall.Width - 20, wall.Height), Color.Black);
+                spriteBatch.Draw(circle, new Rectangle(wall.Location, new Point(20)), Color.Black);
+                spriteBatch.Draw(circle, new Rectangle(wall.Location + wall.Size - new Point(20), new Point(20)), Color.Black);
+                spriteBatch.Draw(circle, new Rectangle(wall.X, wall.Bottom - 20, 20, 20), Color.Black);
+                spriteBatch.Draw(circle, new Rectangle(wall.Right - 20, wall.Y, 20, 20), Color.Black);
             }
             foreach (Rectangle wall in BigWalls)
-                spriteBatch.Draw(texture, new Rectangle(wall.Location + new Point(10), wall.Size - new Point(20)), Color.DarkSlateGray);
+                spriteBatch.Draw(rectTexture, new Rectangle(wall.Location + new Point(10), wall.Size - new Point(20)), new Color(45, 45, 45));
+
             foreach (Rectangle danger in _dangers)
-                spriteBatch.Draw(texture, danger, Color.DarkOrange);
-            spriteBatch.Draw(texture, _goal, Color.LimeGreen);
+                spriteBatch.Draw(lava, new Vector2(danger.X, danger.Y), new Rectangle(0, 0, danger.Width, danger.Height), Color.White);
+            spriteBatch.Draw(rectTexture, _goal, Color.LimeGreen);
         }
         public void Reset()
         {
