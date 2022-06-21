@@ -100,6 +100,37 @@ namespace cellescape
                     new Rectangle(10, 10, 980, 30),
                     new Rectangle(10, 670, 910, 30)
                 }),
+
+                new Level("A lot", new List<Rectangle>()
+                {
+                    //left
+                    new Rectangle(0, 600, 300, 40),
+                    new Rectangle(0, 520, 250, 120),
+                    new Rectangle(0, 430, 190, 210),
+                    //top right
+                    new Rectangle(850, 0, 60, 350),
+                    new Rectangle(790, 290, 120, 60),
+                    //bottom right
+                    new Rectangle(850, 580, 150, 60),
+                    new Rectangle(850, 450, 60, 190),
+                    new Rectangle(710, 450, 200, 60),
+                    new Rectangle(710, 450, 60, 190),
+                    new Rectangle(570, 580, 200, 60),
+                    new Rectangle(570, 450, 60, 190),
+                    //goal
+                    new Rectangle(310, 220, 40, 80),
+                    new Rectangle(),
+                    new Rectangle(),
+
+                }, new List<Cell>()
+                {
+                    new Cell(new Vector2(30, 690), 10, Color.Magenta),
+                    new Cell(new Vector2(970, 690), 10, Color.Magenta),
+                    new Cell(new Vector2(970, 30), 10, Color.Red),
+                    new Cell(new Vector2(950, 570), 10, Color.Magenta),
+                    new Cell(new Vector2(810, 570), 10, Color.Red),
+                    new Cell(new Vector2(670, 570), 10, Color.Cyan),
+                }, new Rectangle(350, 230, 120, 70)),
             };
 
 
