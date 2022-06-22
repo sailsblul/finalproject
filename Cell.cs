@@ -42,9 +42,21 @@ namespace cellescape
             get { return _color; }
             set { _color = value; }
         }
-        public void Move()
+        public void Move(List<Rectangle> walls)
         {
-            _location += _speed;
+
+            for (int i = 1; i <= 100; i++)
+            {
+                _location += _speed / 100;
+                foreach (Rectangle wall in walls)
+                {
+                    if (Intersects(wall))
+                    {
+                        i = 101;
+                        Bounce(wall);
+                    }
+                }
+            }
         }
         public bool Intersects(Rectangle rect)
         {

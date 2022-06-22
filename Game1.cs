@@ -95,15 +95,10 @@ namespace cellescape
                 bool dead = false;
                 foreach (Cell ball in currentLevel.Balls)
                 {
-                    ball.Move();
-                    foreach (Rectangle wall in walls)
-                        if (ball.Intersects(wall))
-                            ball.Bounce(wall);
+                    ball.Move(walls);
                     foreach (Rectangle danger in currentLevel.Dangers)
                         if (ball.Intersects(danger))
                             dead = true;
-                    if (!gameBounds.Contains(ball.Center))
-                        ball.StopOOB(borders);
                 }
                 if (dead)
                     LoadLevel(levelNumber - 1, gameTime);

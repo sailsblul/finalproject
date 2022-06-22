@@ -52,7 +52,7 @@ namespace cellescape
                 }, new List<Cell>()
                 {
                     new Cell(new Vector2(20, 690), 10, Color.Magenta)
-                }, new Rectangle(10, 10, 50, 70)),
+                }, new Rectangle(10, 10, 50, 110)),
 
                 new Level("Getting harder now :)", new List<Rectangle>()
                 {
@@ -118,9 +118,9 @@ namespace cellescape
                     new Rectangle(570, 580, 200, 60),
                     new Rectangle(570, 450, 60, 190),
                     //goal
-                    new Rectangle(310, 220, 40, 80),
-                    new Rectangle(),
-                    new Rectangle(),
+                    new Rectangle(330, 225, 20, 90),
+                    new Rectangle(470, 225, 20, 90),
+                    new Rectangle(330, 300, 160, 15),
 
                 }, new List<Cell>()
                 {
